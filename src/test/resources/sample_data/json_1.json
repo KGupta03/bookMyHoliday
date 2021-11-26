@@ -1,0 +1,28 @@
+{
+  "message": "72",
+  "totalPrice": 51.91,
+  "bookingId": "f0a2b3fa9cbb4b3691b",
+  "flightDetails": {
+    "id": 37,
+    "airlineName": "omnis",
+    "source": "in",
+    "destination": "ipsum",
+    "departureDate": "iste"
+  },
+  "passangerDetails": [
+    {
+      "passangerName": "enim",
+      "age": 99,
+      "mobileNo": 38,
+      "address": "Second Ave 74",
+      "seatNo": 35
+    },
+    {
+      "passangerName": "magni",
+      "age": 54,
+      "mobileNo": 36,
+      "address": "Castro St 68",
+      "seatNo": 96
+    }
+  ]
+}

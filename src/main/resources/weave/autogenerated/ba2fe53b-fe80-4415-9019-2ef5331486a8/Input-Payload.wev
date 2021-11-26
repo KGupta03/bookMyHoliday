@@ -1,0 +1,18 @@
+%dw 2.0
+
+type auto_ba2fe53b_fe80_4415_9019_2ef5331486a8_Input_Payload = {
+  hotelContactNo?: Number, 
+  checkinDateTime?: String, 
+  address?: String, 
+  amountPayable?: Number, 
+  discount?: Number, 
+  travellerName?: String, 
+  mobileNo?: Number, 
+  checkoutDateTime?: String, 
+  hotelName?: String, 
+  age?: Number, 
+  roomType?: String, 
+  paymentType?: String, 
+  _?: Any
+}
+

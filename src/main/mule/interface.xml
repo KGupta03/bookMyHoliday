@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    <flow name="bookmyholiday-main">
+        <http:listener path="/api/*" config-ref="bookmyholiday-httpListenerConfig">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="bookmyholiday-config"/>
+    </flow>
+    <flow name="bookmyholiday-console">
+        <http:listener path="/console/*" config-ref="bookmyholiday-httpListenerConfig">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="bookmyholiday-config"/>
+    </flow>
+    <flow name="get:\flights:bookmyholiday-config">
+        <flow-ref doc:name="getFlightList" doc:id="91d845ff-7ec3-4e62-ad8a-b3526c763160" name="getFlights" />
+    </flow>
+    <flow name="post:\bookFlights:application\json:bookmyholiday-config">
+        <flow-ref doc:name="bookFlight" doc:id="83bd13dc-c642-4f23-b22b-a892766ae6d8" name="bookFlight" />
+    </flow>
+    <flow name="get:\gethotels:bookmyholiday-config">
+        <flow-ref doc:name="getHotels" doc:id="5800f7b8-ab27-49c7-a325-a3b9f4e573fc" name="getHotels" />
+    </flow>
+    <flow name="post:\bookHotel:application\json:bookmyholiday-config">
+		<flow-ref doc:name="Flow Reference" doc:id="2c42e147-d874-455e-b37f-1f90ca6d5fb8" name="bookHotel"/>
+    </flow>
+</mule>

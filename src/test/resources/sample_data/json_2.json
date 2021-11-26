@@ -1,0 +1,28 @@
+{
+  "message": "13",
+  "totalPrice": 24.93,
+  "bookingId": "60f96285649d443e8e7",
+  "flightDetails": {
+    "id": 12,
+    "airlineName": "modi",
+    "source": "ut",
+    "destination": "ex",
+    "departureDate": "mollit"
+  },
+  "passangerDetails": [
+    {
+      "passangerName": "sit",
+      "age": 41,
+      "mobileNo": 1,
+      "address": "Second Ave 53",
+      "seatNo": 68
+    },
+    {
+      "passangerName": "nisi",
+      "age": 51,
+      "mobileNo": 41,
+      "address": "Castro St 38",
+      "seatNo": 97
+    }
+  ]
+}

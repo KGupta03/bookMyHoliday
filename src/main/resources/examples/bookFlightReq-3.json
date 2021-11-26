@@ -1,0 +1,24 @@
+{
+    "noOfPassangers" : 2,
+	"id": 1,
+	"source": "Delhi",
+    	"destination": "Mumbai",
+    	"departureDate": "2021-10-30T13:30:00",
+    	"airlineName": "Indigo",
+	"price": 234,
+    "passangers": [
+	{
+      "passangerName": "Karan",
+      "age": 25,
+      "mobileNo": 9899999999,
+      "address": "Maharashtra, Navi Mumbai",
+"seatNo": 23
+    },
+	{
+      "passangerName": "Puneet",
+      "age": 26,
+      "mobileNo": 9899939999,
+      "address": "Maharashtra, Navi Mumbai",
+"seatNo": 23
+}
+]}

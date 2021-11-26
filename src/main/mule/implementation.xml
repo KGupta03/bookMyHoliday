@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+	
+	<flow name="getFlights" doc:id="408719b4-6108-4244-bb7e-1868bd1ae7cd" >
+		<logger level="INFO" doc:name="Start" doc:id="f3909b31-cc97-4df6-83e5-7ca232b2c603" message="#[payload]"/>
+		<db:select doc:name="Get FlightsData" doc:id="8b654d31-b8b8-452d-b543-032392030dfd" config-ref="Database_Config">
+			<reconnect frequency="${DB.reconnection-strategy-frequency-ms}" count="${DB.reconnection-strategy-attempts}" />
+			<db:sql><![CDATA[SELECT * FROM Flights WHERE source=:source AND destination=:destination AND departuredate=:departuredate]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	source: attributes.queryParams.source,
+	destination: attributes.queryParams.destination,
+	departuredate: attributes.queryParams.departuredate
+}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="JSON Response" doc:id="6318a2f9-ca7f-4401-bd37-f8b2309c0cb7" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	price: payload01.price,
+	availableSeats: payload01.availableSeats,
+	destination: payload01.destination,
+	id: payload01.id,
+	source: payload01.source,
+	departureDate: payload01.departureDate,
+	airlineName: payload01.airlineName
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End" doc:id="a848996e-8cb1-43f0-8684-4c6491ab6290" message="#[payload]"/>
+	</flow>
+	<flow name="bookFlight" doc:id="ede53ef3-0790-4a3d-8cc0-f615136904a4" >
+		<logger level="INFO" doc:name="Start" doc:id="de6118b0-e542-40b5-88bc-ef90e4661262" message="#[payload]"/>
+		<ee:transform doc:name="Create Booking Request" doc:id="02c4acaa-4862-4ede-85d2-d16b6a83a5ec">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload.passangers map ( passanger , indexOfPassanger ) -> {
+	address: passanger.address,
+	destination: payload.destination,
+	id: payload.id as String,
+	source: payload.source,
+	departureDate: payload.departureDate,
+	mobileNo: passanger.mobileNo,
+	seatNo: passanger.seatNo as String,
+	assangerName: passanger.passangerName,
+	age: passanger.age,
+	airlineName: payload.airlineName
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="originalPayload"><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<db:bulk-insert doc:name="Inserting Booking data" doc:id="418871b9-4fa4-48a3-b040-bb9dc8aeaed4" config-ref="Database_Config" target="insertedData">
+			<reconnect frequency="${DB.reconnection-strategy-frequency-ms}" count="${DB.reconnection-strategy-attempts}" />
+			<db:sql><![CDATA[INSERT INTO BookFLight (id,source,destination,departureDate,passangerName,age,mobileNo,address,airlineName,seatNo)values
+(:id,:source,:destination,:departureDate,:assangerName,:age,:mobileNo,:address,:airlineName,:seatNo)]]></db:sql>
+		</db:bulk-insert>
+		<set-payload value="#[vars.originalPayload]" doc:name="Storing Original Data" doc:id="5762e1da-7fde-4f0d-a17d-2db21cf1e2e4" />
+		<ee:transform doc:name="Booking Response in JSON Format" doc:id="29a62c48-6d87-40d2-b10f-08d033a9b81d">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	totalPrice: payload.price * payload.noOfPassangers,
+	flightDetails: {
+		destination: payload.destination,
+		source: payload.source,
+		departureDate: payload.departureDate,
+		airlineName: payload.airlineName
+	},
+	passangerDetails: payload.passangers map ( passanger , indexOfPassanger ) -> {
+		passangerName: passanger.passangerName,
+		address: passanger.address,
+		mobileNo: passanger.mobileNo,
+		seatNo: passanger.seatNo,
+		age: passanger.age
+	},
+	message: "Flight Booked Successfully!!!",
+	bookingId: uuid()
+	}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="BookingID" ><![CDATA[%dw 2.0
+
+---
+"IN" ++ now() as String {format: "ddMMyyhhmmss"}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="End" doc:id="5ef041f3-053a-4e1e-94d5-791ffc26158b" message="#[payload]"/>
+	</flow>
+	<flow name="getHotels" doc:id="e5c76e3e-5e06-45cc-b8ef-07593473fd08" >
+		<logger level="INFO" doc:name="Start" doc:id="c69eefdf-bd61-4b32-bf3f-cf5389220ebf" message="#[payload]" />
+		<ee:transform doc:name="SOAP Request" doc:id="962acf0a-3fb3-4497-92f6-ad2178fb2249" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://localhost:8081/hotel-booking-service/
+---
+{
+	ns0#getHotels: {
+		city: attributes.queryParams.city
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume doc:name="Get List of available Hotels" doc:id="533874e8-1ff6-49ba-b1bb-2b730842110b" operation="getHotels" config-ref="Web_Service_Consumer_Config">
+			<reconnect frequency="${soap.reconnection-strategy-frequency-ms}" count="${soap.reconnection-strategy-attempts}"/>
+		</wsc:consume>
+		<ee:transform doc:name="JSON Response" doc:id="d5a6bd84-9047-4b24-8502-553af5b70dab" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+ns ns0 http://localhost:8081/hotel-booking-service/
+---
+{
+	pincode: payload.body.ns0#getHotelsResponse.pincode,
+	address: payload.body.ns0#getHotelsResponse.address,
+	city: payload.body.ns0#getHotelsResponse.city,
+	roomDetails: payload.body.ns0#getHotelsResponse.roomDetails.*roomDetailsType,
+	hotelName: payload.body.ns0#getHotelsResponse.hotelName,
+	contactNo: payload.body.ns0#getHotelsResponse.contactNo
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End" doc:id="8428a94a-f2c3-4657-8b2c-4a01639b5f3c" message="#[payload]" />
+	</flow>
+	<flow name="bookHotel" doc:id="ba2fe53b-fe80-4415-9019-2ef5331486a8" >
+		<logger level="INFO" doc:name="start" doc:id="aa537999-aadc-4101-9882-57386aad5a45" message="#[payload]"/>
+		<ee:transform doc:name="SOAP Request" doc:id="11f8bda3-cf5f-4393-a317-062eca8ff794" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://localhost:8081/hotel-booking-service/
+---
+{
+	ns0#bookHotel: {
+		hotelName: payload.hotelName,
+		hotelContactNo: payload.hotelContactNo,
+		travellerName: payload.travellerName,
+		mobileNo: payload.mobileNo,
+		age: payload.age,
+		roomType: payload.roomType,
+		checkinDateTime: payload.checkinDateTime,
+		address: payload.address,
+		checkoutDateTime: payload.checkoutDateTime,
+		paymentType: payload.paymentType,
+		amountPayable: payload.amountPayable,
+		discount: payload.discount
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume operation="bookHotel" doc:name="BookHotel Service" doc:id="3c546cb6-077e-4f77-ba0e-d55ef80b1260" config-ref="Web_Service_Consumer_Config">
+			<reconnect frequency="${soap.reconnection-strategy-frequency-ms}" count="${soap.reconnection-strategy-attempts}" />
+		</wsc:consume>
+		<ee:transform doc:name="JSON Response" doc:id="7e612e87-cb2b-4aff-95db-b23bd7846c7a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+ns ns0 http://localhost:8081/hotel-booking-service/
+---
+{
+	message: payload.body.ns0#bookHotelResponse.message,
+	bookingId: payload.body.ns0#bookHotelResponse.bookingId
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End" doc:id="5cb96997-03f8-467d-a8de-e81af3510cf9" message="#[payload]" />
+	</flow>
+</mule>

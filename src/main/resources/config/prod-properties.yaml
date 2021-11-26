@@ -1,0 +1,26 @@
+http:
+ host: "0.0.0.0"
+ port: "8082"
+  
+DB:
+ host: "sql6.freemysqlhosting.net"
+ port: "3306"
+ name: "sql6454225"
+ username: "![Ssk77P7MMaAXK4TJ7cSTig==]"
+ password: "![xQXdhXl8IMcqsI4u35GyyA==]"
+ reconnection-strategy-frequency-ms : "2000"
+ reconnection-strategy-attempts : "2"
+  
+cloudhub:
+ objectStoreV2: "true"
+ 
+soap:
+ wsdlLocation: "http://bookinghotel-dev-sys.us-e2.cloudhub.io/hotel-booking-service/hotel-booking-serviceSOAP?wsdl"
+ address: "http://bookinghotel-dev-sys.us-e2.cloudhub.io/hotel-booking-service/hotel-booking-serviceSOAP"
+ service: "hotel-booking-service"
+ port: "hotel-booking-serviceSOAP"
+ reconnection-strategy-frequency-ms : "2000"
+ reconnection-strategy-attempts : "2"
+
+autodiscovery:
+ APIID: "17459436"

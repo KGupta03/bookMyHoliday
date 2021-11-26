@@ -1,0 +1,19 @@
+{
+    "noOfPassengers" : "2",
+"id": 1
+    "passangers": [
+	{
+      "passangerName": "Karan",
+      "age": "25",
+      "mobileNo": "9899999999",
+      "address": "Maharashtra, Navi Mumbai",
+"seatNo":23
+    },
+	{
+      "passangerName": "Puneet",
+      "age": "26",
+      "mobileNo": "9899939999",
+      "address": "Maharashtra, Navi Mumbai",
+"seatNo":23
+}
+]}
