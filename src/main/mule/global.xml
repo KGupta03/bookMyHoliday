@@ -8,7 +8,7 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
     </db:config>
     <configuration doc:name="Configuration" doc:id="c93b1c38-e2e3-40fb-8807-1c06abf6b9db" defaultErrorHandler-ref="Error_Handler" />
     <configuration-properties doc:name="Configuration properties" doc:id="b39c8a5e-ef93-4be4-8023-0ba65686044e" file="config/dev-properties.yaml" />
-    <secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="db130742-62c5-41c6-bc64-03778ec77614" file="config/{env}-properties.yaml" key="${encrypt.key}" />
+    <secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="db130742-62c5-41c6-bc64-03778ec77614" file="config/dev-properties.yaml" key="1234567890123456" />
 	<http:listener-config name="bookmyholiday-httpListenerConfig" doc:name="HTTP Listener config" doc:id="ed9e99f5-720b-4b29-aec2-3700dcb7fdc7" >
 		<http:listener-connection host="${http.host}" port="${http.port}" />
 	</http:listener-config>
@@ -17,6 +17,7 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 		<wsc:connection wsdlLocation="${soap.wsdlLocation}" service="${soap.service}" port="${soap.port}" address="${soap.address}" />
 	</wsc:config>
 	<api-gateway:autodiscovery apiId="${autodiscovery.APIID}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="80bbabef-94f6-43ca-9872-1d8e537f8092" flowRef="bookmyholiday-main" />
+	<global-property doc:name="Global Property" doc:id="b289ba18-1f25-403f-8d23-47662f9ad778" name="env" value="dev" />
 	<error-handler name="Error_Handler">
         <on-error-propagate type="APIKIT:BAD_REQUEST">
             <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">

@@ -45,8 +45,6 @@
 						<properties>
 							<http.host>${http.host}</http.host>
 							<http.port>${http.port}</http.port>
-							<encrypt.key>${encrypt.key}</encrypt.key>
-							<env>${env}</env>
 							<anypoint.platform.client_id>${anypoint.platform.client_id}</anypoint.platform.client_id>
 							<anypoint.platform.client_secret>${anypoint.platform.client_secret}</anypoint.platform.client_secret>
 						</properties>
