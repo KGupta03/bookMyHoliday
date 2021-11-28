@@ -1,0 +1,8 @@
+%dw 2.0
+
+type auto_5bd943f9_76a6_4e71_985e_2daf0b91744d_Output_Payload = Array<{  pincode?: Number,   address?: String,   city?: String,   roomDetails: Array<{    price?: Number,     discount?: Number,     roomType?: String,     _?: Any  }>, 
+  hotelName?: String, 
+  contactNo?: Number, 
+  _?: Any
+}>
+

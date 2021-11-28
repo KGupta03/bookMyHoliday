@@ -69,6 +69,7 @@ payload]]></ee:set-variable>
 (:id,:source,:destination,:departureDate,:assangerName,:age,:mobileNo,:address,:airlineName,:seatNo)]]></db:sql>
 		</db:bulk-insert>
 		<set-payload value="#[vars.originalPayload]" doc:name="Storing Original Data" doc:id="5762e1da-7fde-4f0d-a17d-2db21cf1e2e4" />
+		<set-variable value="#[uuid()]" doc:name="Set Variable" doc:id="79c73c89-1f5d-4822-b5cd-35d411515991" variableName="bookingId"/>
 		<ee:transform doc:name="Booking Response in JSON Format" doc:id="29a62c48-6d87-40d2-b10f-08d033a9b81d">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
@@ -90,7 +91,7 @@ output application/json
 		age: passanger.age
 	},
 	message: "Flight Booked Successfully!!!",
-	bookingId: uuid()
+	bookingId: vars.bookingId
 	}]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
