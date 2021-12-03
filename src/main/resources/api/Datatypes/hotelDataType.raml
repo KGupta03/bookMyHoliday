@@ -1,0 +1,62 @@
+#%RAML 1.0 Library
+
+types:
+  hotels:
+    type: object
+    properties:
+      hotelName?:
+        type: string
+      address?:
+        type: string
+      contactNo?:
+        type: number
+      pincode?:
+        type: number
+      city?:
+        type: string
+      roomDetails:
+        type: roomDetails[]
+        required: true
+  
+  roomDetails:
+    properties:
+      roomType?:
+        type: string
+      price?:
+        type: number
+      discount?:
+        type: number
+
+  bookHotel:
+    properties:
+      hotelName?:
+        type: string
+      hotelContactNo?:
+        type: number
+      travellerName?:
+        type: string
+      mobileNo?:
+        type: number
+      age?:
+        type: number
+      roomType?:
+        type: string
+      checkinDateTime?:
+        type: datetime-only
+      address?:
+        type: string
+      checkoutDateTime?:
+        type: datetime-only
+      paymentType?:
+        type: string
+      amountPayable?:
+        type: number
+      discount?:
+        type: number
+    
+  bookHotelSuccess:
+    properties:
+      message?:
+        type: string
+      bookingId?:
+        type: string

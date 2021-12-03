@@ -1,0 +1,95 @@
+#%RAML 1.0 Library
+
+types:
+  flights:
+    type : object
+    properties:
+      id?: 
+        description: Flight unique ID.
+        type: number
+      airlineName?: 
+        description: Name of the Airline.
+        type: string
+      source?: 
+        description: Start Location.
+        type: string
+      destination?:
+        description: End Location.
+        type: string
+      departureDate?:
+        description: Date of Departure.
+        type: datetime-only
+      price?:
+        description: Cost of ticket.
+        type: number
+      availableSeats?:
+        description: No of seats available.
+        type: number
+
+  bookFlight:
+    type: object
+    properties:
+      noOfPassangers?:
+        type: number
+      id?:
+        description: No of passengers.
+        type: number
+      source?: 
+        type: string
+      destination?:
+        type: string
+      departureDate?:
+        type: datetime-only
+      airlineName?:
+        type: string
+      price?:
+        type: number
+      passangers:
+        type: passangers[]
+        required: true
+        
+  passangers:
+    properties:
+      passangerName?:
+        description: Name of the passangers.
+        type: string
+      age?: 
+        description: Passenger age.
+        type: number
+      mobileNo?:
+        description: Mobile no of the passenger.
+        type: number
+      address?: 
+        description: Passenger residence address.
+        type: string
+      seatNo?: 
+        description: Passenger residence address.
+        type: number
+      
+  successFlight:
+    properties:
+      message?:
+        type: string
+      totalPrice?:
+        type: number
+      bookingId:
+        type: string
+
+      flightDetails:
+        type: object
+        properties:
+          id?:
+            type: number
+          airlineName?:
+            type: string
+          source?:
+            type: string
+          destination?:
+            type: string
+          departureDate:
+            type: datetime-only
+      passangerDetails:
+        type: passangers[]
+        required: true
+
+        

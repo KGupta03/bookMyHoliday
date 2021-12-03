@@ -9,7 +9,7 @@
     <http:listener-config name="bookmyholiday-httpListenerConfig" doc:name="HTTP Listener config" doc:id="ed9e99f5-720b-4b29-aec2-3700dcb7fdc7">
         <http:listener-connection host="${http.host}" port="${http.port}" />
     </http:listener-config>
-    <apikit:config name="bookmyholiday-config" api="resource::65f59bf9-171f-4cbe-9fb5-f429d1baf7fc:bookmyholiday:1.0.0:raml:zip:bookmyholiday.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="bookmyholiday-config" api="api\bookmyholiday.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="59e496a1-fd70-41b7-aae1-5758c55f460b">
         <wsc:connection wsdlLocation="${soap.wsdlLocation}" service="${soap.service}" port="${soap.port}" address="${soap.address}" />
     </wsc:config>

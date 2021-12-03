@@ -1,0 +1,126 @@
+#%RAML 1.0
+title: BookMyHoliday
+version: V1
+description: BookMyHoliday is a platform that gives its customers a holistic experience of booking their perfect holiday.
+
+baseUri: http://localhost:8081/api/v1
+
+protocols:
+  - HTTP
+  - HTTPS
+
+mediaType: 
+  application/json
+
+### Traits ###
+traits:
+  errorResponse: !include Traits/errorResponse.raml
+
+### Security Scheme ###
+securitySchemes:
+  Authentication: !include SecurityScheme/securityScheme.raml
+
+securedBy:
+  - Authentication
+
+### Library ###
+uses:
+  flightsDatatype: Datatypes/flightDatatype.raml
+  hotelDatatype: Datatypes/hotelDataType.raml
+  carDataType: Datatypes/carDataType.raml
+
+/flights:
+  is: [errorResponse]
+  get:
+    displayName: Get Flights.
+    description: API will fetch list of flights based on the Location and Date.
+    queryParameters:
+        source:
+          type: string
+          required: true
+        destination:
+          type: string
+          required: true
+        departuredate:
+          type: string
+          required: true
+    responses:
+        200:
+          body:
+            application/json:
+              type: flightsDatatype.flights[]
+              examples:
+                output: !include Examples/listFlights.raml
+
+/bookFlights:
+  is: [errorResponse]
+  post:
+    displayName: Book Flight.
+    description: API will be used to book Flight Ticket.
+    body:
+      application/json:
+        type: flightsDatatype.bookFlight
+        examples:
+          input: !include Examples/bookFlight.raml
+    responses:
+      201:
+        body:
+          application/json:
+            type: flightsDatatype.successFlight
+            examples:
+              output: !include Examples/successBookFlight.raml
+
+/gethotels:
+  is: [errorResponse]
+  get:
+    displayName: Get Hotels.
+    description: API will fetch list of Hotels based on city.
+    queryParameters:
+      city:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: hotelDatatype.hotels[]
+            examples:
+              output: !include Examples/listHotels.raml
+
+/bookHotel:
+  is: [errorResponse]
+  post:
+    displayName: Book Hotel.
+    description: API will be used to book Hotel.
+    body:
+      application/json:
+        type: hotelDatatype.bookHotel
+        examples:
+          input: !include Examples/bookHotel.raml
+    responses:
+      201:
+        body:
+          application/json:
+            type: hotelDatatype.bookHotelSuccess
+            examples:
+              output: !include Examples/successBookHotel.raml
+
+/getCars:
+  is: [errorResponse]
+  get:
+    displayName: Get Cars.
+    description: API will fetch list of Car details.
+    queryParameters:
+      source:
+        type: string
+        required: true
+      destination:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: carDataType.cars[]
+            examples:
+              output: !include Examples/carsList.raml
