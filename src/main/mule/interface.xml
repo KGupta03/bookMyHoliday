@@ -10,8 +10,7 @@
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:router config-ref="bookmyholiday-config"
-        doc:id="330f64bb-8198-4b0e-b435-2220f3196aaa" />
+        <apikit:router config-ref="bookmyholiday-config" doc:id="330f64bb-8198-4b0e-b435-2220f3196aaa" />
     </flow>
     <flow name="bookmyholiday-console" doc:id="45ff7073-ed3d-4dac-91ec-ad322a59a509">
         <http:listener path="/console/*" config-ref="bookmyholiday-httpListenerConfig">
@@ -23,7 +22,7 @@
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:console config-ref="bookmyholiday-config"/>
+        <apikit:console config-ref="bookmyholiday-config" />
     </flow>
     <flow name="get:\flights:bookmyholiday-config" doc:id="e598914e-c9d7-4658-8a1a-9cf96a2fc0ed">
         <flow-ref doc:name="getFlightList" doc:id="91d845ff-7ec3-4e62-ad8a-b3526c763160" name="getFlights" />
@@ -35,6 +34,9 @@
         <flow-ref doc:name="getHotels" doc:id="5800f7b8-ab27-49c7-a325-a3b9f4e573fc" name="getHotels" />
     </flow>
     <flow name="post:\bookHotel:application\json:bookmyholiday-config" doc:id="bf656935-7aba-41b2-8ae2-bb0fe35cc0c5">
-		<flow-ref doc:name="Flow Reference" doc:id="2c42e147-d874-455e-b37f-1f90ca6d5fb8" name="bookHotel"/>
+        <flow-ref doc:name="Flow Reference" doc:id="2c42e147-d874-455e-b37f-1f90ca6d5fb8" name="bookHotel" />
+    </flow>
+    <flow name="get:\getCars:bookmyholiday-config">
+		<flow-ref doc:name="getCars" doc:id="a76fdf43-cc4b-485d-b30f-114f0ba35496" name="getCars"/>
     </flow>
 </mule>

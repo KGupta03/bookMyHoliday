@@ -23,4 +23,8 @@ soap:
  reconnection-strategy-attempts : "2"
 
 autodiscovery:
- APIID: "17459436"
+ APIID: "17477771"
+ 
+file:
+ path: getCars.csv
+ 

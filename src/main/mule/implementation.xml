@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:db="http://www.mulesoft.org/schema/mule/db"
-	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
-http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
-	
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
 	<flow name="getFlights" doc:id="408719b4-6108-4244-bb7e-1868bd1ae7cd" >
 		<logger level="INFO" doc:name="Start" doc:id="f3909b31-cc97-4df6-83e5-7ca232b2c603" message="#[payload]"/>
 		<db:select doc:name="Get FlightsData" doc:id="8b654d31-b8b8-452d-b543-032392030dfd" config-ref="Database_Config">
@@ -181,5 +181,21 @@ ns ns0 http://localhost:8081/hotel-booking-service/
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="End" doc:id="5cb96997-03f8-467d-a8de-e81af3510cf9" message="#[payload]" />
+	</flow>
+	<flow name="getCars" doc:id="7e6c6050-1358-438a-8c05-6fee65a81244" >
+		<logger level="INFO" doc:name="start" doc:id="6197cf3a-7b0d-45f8-ae91-193ea3fcfa62" message="#[payload]"/>
+		<set-variable value="#[attributes.queryParams.source]" doc:name="source" doc:id="4fee5ceb-f850-4f82-a0c9-dff96d79ace7" variableName="source"/>
+		<set-variable value="#[attributes.queryParams.destination]" doc:name="destination" doc:id="86ba8745-1a98-472f-9885-c909a2c315a6" variableName="destination"/>
+		<file:read doc:name="Read" doc:id="8d3e5fc1-50ba-4002-8cb8-a506f6d2c730" path="getCars.csv" outputMimeType="application/csv"/>
+		<ee:transform doc:name="Transform Message" doc:id="060bb742-1717-4d0e-91ef-d2dbaa493e4c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload filter ($.source == vars.source and $.destination == vars.destination) 
+map $]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="end" doc:id="ff8cb40f-828d-4b64-b417-50101ab6dafb" message="#[payload]"/>
 	</flow>
 </mule>

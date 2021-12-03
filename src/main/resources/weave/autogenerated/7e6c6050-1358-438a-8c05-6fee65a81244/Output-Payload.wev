@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_7e6c6050_1358_438a_8c05_6fee65a81244_Output_Payload = Array<{  carType?: String,   carNo?: String,   price?: Number,   destination?: String,   model?: String,   source?: String,   _?: Any}>
+
